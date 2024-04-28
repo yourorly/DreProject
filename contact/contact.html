@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DRE | Contacts</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="heading">
+        <div class="logo">
+            <img src="dresmalllogo.png" alt="dresmalllogo">
+        </div>
+    </div>
+    
+    <div class="contact-container">
+        <form action="" id="contactform" class="contact-left" onsubmit="sendMessage()">
+            <a href="../web/home.php">< Back</a>
+            <div class="contact-left-title">
+                <h2>Contact Us</h2>
+                <hr>
+            </div>
+            <input type="text" name="name" placeholder="Your Name" class="contact-inputs" required>
+            <input type="email" name="email" placeholder="Your Email" class="contact-inputs" required>
+            <select name="purp" id="purpose" class="contact-inputs">
+                <option value="Inquiry">Inquiry</option>
+                <option value="Feedback">Feedback</option>
+            </select>
+            <textarea name="message" placeholder="Your Message" class="contact-inputs" required></textarea>
+            <button type="submit">Submit <img src="arrow.png" alt="arrow"></button>   
+        </form>
+    </div>
+</body>
+
+<script>
+    function sendMessage() {
+    var form = document.getElementById('contactform');
+    var formData = new FormData(form);
+
+    var webhookUrl = 'https://discord.com/api/webhooks/1230414542261977131/knaDtE_CQegJI1yXh1BzLD9W_xgjBKybtXCXYh1nBPmm8hDE1NRJHLoNrJmN2TJzeTu8';
+
+    fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            content: `--Contact--\n\nNew Message Submission:\n\nName: ${formData.get('name')}\nEmail: ${formData.get('email')}\n${formData.get('purp')}\n\nMessage: \n${formData.get('message')}`,
+        }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        alert('Message submitted successfully!');
+        form.reset();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error submitting message. Please try again.');
+    });
+  }
+</script>
+</html>
